@@ -1,7 +1,19 @@
+import useCustomToast from "../hooks/useToast";
+import { useAuthStore } from "../api/auth";
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const Sidebar = (): React.JSX.Element => {
+  const navigate = useNavigate();
+  const toast = useCustomToast();
+  const { logout } = useAuthStore();
+  function signout() {
+    logout();
+    toast("see you soon", "info");
+    setTimeout(() => {
+      navigate("/signin");
+    }, 2000);
+  }
   return (
     <div className="flex w-screen">
       <button
@@ -35,8 +47,8 @@ const Sidebar = (): React.JSX.Element => {
         <div className="overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
           <ul className="space-y-2">
             <li>
-              <a
-                href="#"
+              <Link
+                to="/users"
                 className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <svg
@@ -50,15 +62,13 @@ const Sidebar = (): React.JSX.Element => {
                   <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
                 <span className="ml-3">All Users</span>
-              </a>
+              </Link>
             </li>
-
-            
           </ul>
           <ul className="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
             <li>
-              <a
-                href="#"
+              <Link
+                to="/profile"
                 className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
               >
                 <svg
@@ -76,7 +86,7 @@ const Sidebar = (): React.JSX.Element => {
                   ></path>
                 </svg>
                 <span className="ml-3">Profile</span>
-              </a>
+              </Link>
             </li>
             <li>
               <a
@@ -96,8 +106,8 @@ const Sidebar = (): React.JSX.Element => {
               </a>
             </li>
             <li>
-              <a
-                href="#"
+              <div
+                onClick={signout}
                 className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
               >
                 <svg
@@ -113,8 +123,8 @@ const Sidebar = (): React.JSX.Element => {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span className="ml-3">Help</span>
-              </a>
+                <span className="ml-3">logout</span>
+              </div>
             </li>
           </ul>
         </div>

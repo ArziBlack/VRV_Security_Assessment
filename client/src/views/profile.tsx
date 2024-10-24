@@ -1,5 +1,7 @@
+import useCustomToast from "../hooks/useToast";
 import { useAuthStore } from "../api/auth";
 import React, { useState } from "react";
+import { Spinner } from "@chakra-ui/react";
 
 interface Profile {
   name: string | null;
@@ -9,7 +11,8 @@ interface Profile {
 }
 
 const Profile = (): React.JSX.Element => {
-  const { user, update_profile } = useAuthStore();
+  const toast = useCustomToast();
+  const { user, update_profile, loading } = useAuthStore();
   const [profile, setProfile] = useState<Profile>({
     name: user?.name || "",
     password: "",
@@ -17,7 +20,7 @@ const Profile = (): React.JSX.Element => {
     role: user?.role || "MEMBER",
   });
 
-  const { name, password } = profile;
+  console.log(user);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -27,13 +30,19 @@ const Profile = (): React.JSX.Element => {
     });
   };
 
-  const handleUpdate = (field: keyof Profile) => {
-    console.log(`Updated ${field}: ${profile[field]}`);
+  const handleUpdate = async (name: keyof Profile) => {
+    console.log(`Updated ${name}: ${profile[name]}`);
     const id = user?.id as string;
-    if (name && password) {
-      update_profile(name, password, id);
+    const fields = profile[name];
+    console.log(fields);
+    const field = { [name]: profile[name] };
+    console.log(field, id);
+    if (id && field) {
+      await update_profile(field, id).then(() =>
+        toast(`${name} updated successfully`, "success")
+      );
     } else {
-      console.log("blank fields!!");
+      toast("cannot update blank fields!", "warning");
     }
   };
 
@@ -54,8 +63,9 @@ const Profile = (): React.JSX.Element => {
           <button
             onClick={() => handleUpdate("name")}
             className="mt-2 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-500"
+            disabled={loading}
           >
-            Update Name
+            {loading ? <Spinner /> : "Update Name"}
           </button>
         </div>
 
@@ -73,8 +83,9 @@ const Profile = (): React.JSX.Element => {
           <button
             onClick={() => handleUpdate("password")}
             className="mt-2 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-500"
+            disabled={loading}
           >
-            Update Password
+            {loading ? <Spinner /> : "Update Password"}
           </button>
         </div>
 
@@ -92,6 +103,7 @@ const Profile = (): React.JSX.Element => {
           <button
             onClick={() => handleUpdate("email")}
             className="mt-2 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-500"
+            disabled
           >
             Update Email
           </button>
@@ -111,6 +123,7 @@ const Profile = (): React.JSX.Element => {
           <button
             onClick={() => handleUpdate("role")}
             className="mt-2 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-500"
+            disabled
           >
             Update Role
           </button>

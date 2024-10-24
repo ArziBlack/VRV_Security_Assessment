@@ -28,8 +28,7 @@ interface AuthState {
     password: string
   ) => Promise<AxiosResponse<any, any> | undefined>;
   update_profile: (
-    name: string,
-    password: string,
+    field: object,
     id: string
   ) => Promise<AxiosResponse<any, any> | undefined>;
   logout: () => void;
@@ -54,7 +53,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         "http://localhost:3000/api/v1/auth/signup",
         { name, email, password, confirmPassword }
       );
-      set({ user: response.data.user, loading: false });
+      set({ user: response.data.data, loading: false });
       sessionStorage.setItem("token", response.data.token);
     } catch (error: any) {
       set({
@@ -71,7 +70,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         "http://localhost:3000/api/v1/auth/signin",
         { email, password }
       );
-      set({ user: response.data.user, loading: false });
+      set({ user: response.data.data, loading: false, isAuthenticated: true });
       sessionStorage.setItem("token", response.data.token);
       return response;
     } catch (error: any) {
@@ -82,20 +81,20 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  update_profile: async (name: string, password: string, id: string) => {
+  update_profile: async (field: object, id: string) => {
     set({ loading: true, error: null });
     try {
       const token = sessionStorage.getItem("token")?.trim()?.toString();
-      const response = await axios.post(
+      const response = await axios.put(
         `http://localhost:3000/api/v1/user/update/${id}`,
-        { name, password },
+        field,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      set({ user: response.data.user, loading: false });
+      set({ user: response.data.data, loading: false });
       return response;
     } catch (error: any) {
       set({
