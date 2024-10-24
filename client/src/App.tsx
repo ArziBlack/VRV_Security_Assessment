@@ -5,6 +5,7 @@ import Signup from "./pages/signup";
 import Sidebar from "./components/sidebar";
 import Profile from "./views/profile";
 import DataTable from "./views/table";
+import ProtectedRoute from "./utils/protected-route";
 
 function App() {
   return (
@@ -12,9 +13,11 @@ function App() {
       <Routes>
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/" element={<Sidebar />}>
-          <Route index element={<Profile />} />
-          <Route path="users" element={ <DataTable/>} />
+        <Route path="/" element={<ProtectedRoute />}>
+          <Route element={<Sidebar />}>
+            <Route index element={<Profile />} />
+            <Route path="users" element={<DataTable />} />
+          </Route>
         </Route>
       </Routes>
     </div>
