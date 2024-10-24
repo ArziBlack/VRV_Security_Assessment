@@ -575,7 +575,7 @@ const Sidebar = (): React.JSX.Element => {
           </div>
         </div>
       </aside>
-      <div>
+      <div className="bg-white pl-64 flex flex-col w-full">
         <Outlet />
       </div>
     </div>
