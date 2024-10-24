@@ -32,7 +32,7 @@ export default function DataTable() {
 
   return (
     <div className="p-5 mt-10">
-      <Paper sx={{ height: 400, width: "100%" }}>
+      {/* <Paper sx={{ height: 400, width: "100%" }}> */}
         <DataGrid
           rows={users}
           columns={columns}
@@ -41,7 +41,7 @@ export default function DataTable() {
           checkboxSelection
           sx={{ border: 0 }}
         />
-      </Paper>
+      {/* </Paper> */}
     </div>
   );
 }

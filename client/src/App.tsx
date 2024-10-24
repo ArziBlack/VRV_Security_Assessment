@@ -15,7 +15,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route element={<Sidebar />}>
+          <Route path="/" element={<Sidebar />}>
             <Route index element={<Profile />} />
             <Route path="users" element={<DataTable />} />
           </Route>

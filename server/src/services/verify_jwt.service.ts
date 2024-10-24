@@ -1,42 +1,28 @@
-import { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 import { JWT_SECRET } from "../config";
-import { TypedNextFn, TypedRequest, TypedResponse } from "typings/express";
-import { APIErrorResponse } from "typings/response";
+import { NextFunction, Request, Response } from "express";
 
-export const verify_token = async (
-  req: TypedRequest,
-  res: TypedResponse<APIErrorResponse>,
-  next: TypedNextFn,
-) => {
-  const auth_header = req.headers["authorization"];
-  if (!auth_header) {
-    res
-      .status(401)
-      .json({
-        success: false,
-        message: "You are not Authorized!!",
-        errors: "Unauthorized",
-      });
-  }
-
-  const token = auth_header?.split(" ")[1];
-
-  if (!token) {
-    res.status(403).json({
+export async function verify(req: Request, res: Response, next: NextFunction) {
+  const authHeader = await req.headers["authorization"];
+  if (authHeader) {
+    const token = authHeader.split(" ")[1];
+    jwt.verify(
+      token,
+      JWT_SECRET,
+      (err: any, user: any) => {
+        if (err) 
+          return res.status(403).json({
+            success: false,
+            message: "Token Cannot be Verified!!!",
+          });
+        next();
+      },
+    );
+  } else {
+    return res.status(401).json({
       success: false,
-      message: "Token cannot be found!!!",
-      errors: "cannot verify token",
+      message: "You are not Authenticated",
     });
   }
-
-  verify(token as string, JWT_SECRET, (err: any, user: any) => {
-    if (err)
-    res.status(403).json({
-        success: false,
-        message: "Token cannot be Verified!!!",
-        errors: "cannot verify token",
-      });
-    next();
-  });
-};
+}

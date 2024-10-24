@@ -71,7 +71,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         { email, password }
       );
       set({ user: response.data.data, loading: false, isAuthenticated: true });
-      sessionStorage.setItem("token", response.data.token);
+      sessionStorage.setItem("token", response.data.data.token);
       return response;
     } catch (error: any) {
       set({
@@ -85,6 +85,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ loading: true, error: null });
     try {
       const token = sessionStorage.getItem("token")?.trim()?.toString();
+      console.log(token);
       const response = await axios.put(
         `http://localhost:3000/api/v1/user/update/${id}`,
         field,

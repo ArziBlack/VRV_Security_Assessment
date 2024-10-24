@@ -38,7 +38,7 @@ export default class Authcontroller extends AuthControllerInterface {
                 const { error } = signupValidationSchema.validate(req.body, { abortEarly: false });
 
                 if (error) {
-                    res.status(400).json({
+                    return res.status(400).json({
                       success: false,
                       message: "signup validation failed",
                       errors: error.details.map((detail) => detail.message),
@@ -54,7 +54,7 @@ export default class Authcontroller extends AuthControllerInterface {
                 }); 
 
                 if (user_exists) {
-                    res.status(http_status.BAD_REQUEST).json(
+                    return res.status(http_status.BAD_REQUEST).json(
                     send_response({
                         status: http_status.BAD_REQUEST,
                         success: false,
@@ -108,7 +108,7 @@ export default class Authcontroller extends AuthControllerInterface {
             }) as IUser;
 
             if (!user) {
-                res.status(http_status.UNAUTHORIZED).json(
+                return res.status(http_status.UNAUTHORIZED).json(
                     send_response({
                         status: http_status.UNAUTHORIZED,
                         success: false,
@@ -121,7 +121,7 @@ export default class Authcontroller extends AuthControllerInterface {
             const isPasswordValid = await bcrypt_service.comparePassword(password, user.password);
 
             if (!isPasswordValid) {
-                res.status(http_status.UNAUTHORIZED).json(
+                return res.status(http_status.UNAUTHORIZED).json(
                     send_response({
                         status: http_status.UNAUTHORIZED,
                         success: false,
