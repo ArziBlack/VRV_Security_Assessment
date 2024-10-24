@@ -51,7 +51,7 @@ export default class Authcontroller extends AuthControllerInterface {
                     where: {
                         email
                     }
-                });
+                }); 
 
                 if (user_exists) {
                     res.status(http_status.BAD_REQUEST).json(

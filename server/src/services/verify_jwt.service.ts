@@ -11,7 +11,7 @@ export const verify_token = async (
 ) => {
   const auth_header = req.headers["authorization"];
   if (!auth_header) {
-    return res
+    res
       .status(401)
       .json({
         success: false,
@@ -20,11 +20,19 @@ export const verify_token = async (
       });
   }
 
-  const token = auth_header.split(" ")[1];
+  const token = auth_header?.split(" ")[1];
 
-  verify(token, JWT_SECRET, (err: any, user: any) => {
+  if (!token) {
+    res.status(403).json({
+      success: false,
+      message: "Token cannot be found!!!",
+      errors: "cannot verify token",
+    });
+  }
+
+  verify(token as string, JWT_SECRET, (err: any, user: any) => {
     if (err)
-      return res.status(403).json({
+    res.status(403).json({
         success: false,
         message: "Token cannot be Verified!!!",
         errors: "cannot verify token",
