@@ -1,5 +1,5 @@
-import { useAuthStore } from "@/api/auth";
-import { toaster } from "@/components/ui/toaster";
+import { useAuthStore } from "../api/auth";
+import { toaster } from "../components/ui/toaster";
 import React, { useState } from "react";
 
 const Signin = (): React.JSX.Element => {

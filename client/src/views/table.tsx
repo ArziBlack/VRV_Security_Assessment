@@ -1,6 +1,6 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
-import { useAdminStore } from "@/api/admin";
+import { useAdminStore } from "../api/admin";
 import { useEffect } from "react";
 
 const columns: GridColDef[] = [

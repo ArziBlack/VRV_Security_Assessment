@@ -1,4 +1,4 @@
-import { useAuthStore } from "@/api/auth";
+import { useAuthStore } from "../api/auth";
 import React, { useState } from "react";
 
 interface Profile {
@@ -9,13 +9,15 @@ interface Profile {
 }
 
 const Profile = (): React.JSX.Element => {
-  const { user } = useAuthStore();
+  const { user, update_profile } = useAuthStore();
   const [profile, setProfile] = useState<Profile>({
     name: user?.name || "",
     password: "",
     email: user?.email || "",
     role: user?.role || "MEMBER",
   });
+
+  const { name, password } = profile;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,7 +28,13 @@ const Profile = (): React.JSX.Element => {
   };
 
   const handleUpdate = (field: keyof Profile) => {
-    alert(`Updated ${field}: ${profile[field]}`);
+    console.log(`Updated ${field}: ${profile[field]}`);
+    const id = user?.id as string;
+    if (name && password) {
+      update_profile(name, password, id);
+    } else {
+      console.log("blank fields!!");
+    }
   };
 
   return (

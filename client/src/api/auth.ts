@@ -27,6 +27,11 @@ interface AuthState {
     email: string,
     password: string
   ) => Promise<AxiosResponse<any, any> | undefined>;
+  update_profile: (
+    name: string,
+    password: string,
+    id: string
+  ) => Promise<AxiosResponse<any, any> | undefined>;
   logout: () => void;
 }
 
