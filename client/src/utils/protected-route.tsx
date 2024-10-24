@@ -1,6 +1,7 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 const ProtectedRoute = () => {
+  const location = useLocation();
   const isUserLoggedIn = sessionStorage.getItem("token") !== null;
 
   return isUserLoggedIn ? (
