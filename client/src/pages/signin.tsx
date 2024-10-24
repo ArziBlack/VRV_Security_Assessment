@@ -1,9 +1,13 @@
+import useCustomToast from "../hooks/useToast";
 import { useAuthStore } from "../api/auth";
-import { toaster } from "../components/ui/toaster";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Spinner } from "@chakra-ui/react";
 
 const Signin = (): React.JSX.Element => {
-  const { signin } = useAuthStore();
+  const toast = useCustomToast();
+  const navigate = useNavigate();
+  const { signin, loading, isAuthenticated } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -11,27 +15,25 @@ const Signin = (): React.JSX.Element => {
   const handleSignin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      toaster.create({
-        title: "Fields cannot be blank",
-        type: "warning",
-        duration: 3000,
-        description: "Blank fields!!",
-      });
+    if (!email && !password) {
+      toast("Email or Password cannot be blank!", "warning");
       return;
     }
 
     await signin(email, password)
-      .then(() =>
-        toaster.create({
-          title: "Signed in successfully",
-          type: "success",
-          description: "Blank fields!!",
-          duration: 3000,
-        })
-      )
+      .then((res) => {
+        if (res) toast("signin successful", "success");
+      })
       .catch((err) => console.log(err));
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    }
+  }, [isAuthenticated]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -115,8 +117,9 @@ const Signin = (): React.JSX.Element => {
               <button
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                disabled={loading}
               >
-                Sign in
+                {loading ? <Spinner /> : "Sign in"}
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}

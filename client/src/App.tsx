@@ -11,17 +11,12 @@ function App() {
   return (
     <div className="bg-gray-50 dark:bg-gray-900 h-full">
       <Routes>
-        {/* Public Routes */}
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
-          {/* Layout with Sidebar for protected pages */}
           <Route element={<Sidebar />}>
-            {/* Default route to Profile */}
             <Route index element={<Profile />} />
-            {/* Additional protected routes */}
             <Route path="users" element={<DataTable />} />
           </Route>
         </Route>

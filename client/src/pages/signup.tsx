@@ -1,65 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthStore } from "../api/auth";
-import {
-  Alert,
-  CircularProgress,
-  Snackbar,
-  SnackbarCloseReason,
-} from "@mui/material";
+import useCustomToast from "../hooks/useToast";
+import { Spinner } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const Signup = (): React.JSX.Element => {
+  const toast = useCustomToast();
+  const navigate = useNavigate();
   const { signup, loading, isSignedup } = useAuthStore();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [isError, setIsError] = useState(false);
-
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setIsError(false);
-  };
-
   const handleSignup = async (e: any) => {
     e.preventDefault();
     if (!name && !email && !password && !confirmPassword) {
-      setIsError(true);
+      toast("Fields cannot be blank!", "warning");
     }
     await signup(name, email, password, confirmPassword)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
 
+  useEffect(() => {
+    if (isSignedup) {
+      toast("signed up successfully", "success");
+      setTimeout(() => {
+        navigate("/signin");
+      }, 1500);
+    }
+  }, [isSignedup]);
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900 h-screen">
-      <Snackbar open={isSignedup} autoHideDuration={6000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          success
-        </Alert>
-      </Snackbar>
-      <Snackbar open={isError} autoHideDuration={6000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity="warning"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          fields cannot be blank!!
-        </Alert>
-      </Snackbar>
       <div className="flex flex-col items-center justify-center px-6 py-6 mx-auto md:h-screen lg:py-0">
         <a
           href="#"
@@ -145,8 +120,9 @@ const Signup = (): React.JSX.Element => {
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 onClick={handleSignup}
+                disabled={loading}
               >
-                {loading ? <CircularProgress /> : "Create an account"}
+                {loading ? <Spinner /> : "Create an account"}
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}

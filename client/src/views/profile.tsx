@@ -66,7 +66,7 @@ const Profile = (): React.JSX.Element => {
           <input
             type="password"
             name="password"
-            value={profile.password}
+            value={profile?.password}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
           />
@@ -85,7 +85,7 @@ const Profile = (): React.JSX.Element => {
           <input
             type="email"
             name="email"
-            value={profile.email as string}
+            value={profile?.email as string}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
           />
@@ -104,7 +104,7 @@ const Profile = (): React.JSX.Element => {
           <input
             type="text"
             name="role"
-            value={profile.role as string}
+            value={profile?.role as string}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
           />
