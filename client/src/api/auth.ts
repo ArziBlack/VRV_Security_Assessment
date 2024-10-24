@@ -5,7 +5,9 @@ import axios, { AxiosResponse } from "axios";
 interface User {
   id: string;
   uid: string;
-  email: string;
+  email: string | null;
+  name: string | null;
+  role: string | null;
   token: string;
 }
 

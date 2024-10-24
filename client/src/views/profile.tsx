@@ -1,18 +1,20 @@
+import { useAuthStore } from "@/api/auth";
 import React, { useState } from "react";
 
 interface Profile {
-  name: string;
+  name: string | null;
   password: string;
-  email: string;
-  role: string;
+  email: string | null;
+  role: string | null;
 }
 
 const Profile = (): React.JSX.Element => {
+  const { user } = useAuthStore();
   const [profile, setProfile] = useState<Profile>({
-    name: "",
+    name: user?.name || "",
     password: "",
-    email: "",
-    role: "",
+    email: user?.email || "",
+    role: user?.role || "MEMBER",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +27,6 @@ const Profile = (): React.JSX.Element => {
 
   const handleUpdate = (field: keyof Profile) => {
     alert(`Updated ${field}: ${profile[field]}`);
-    // You can replace this alert with an API call to update the backend.
   };
 
   return (
@@ -38,7 +39,7 @@ const Profile = (): React.JSX.Element => {
           <input
             type="text"
             name="name"
-            value={profile.name}
+            value={profile?.name as string}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
           />
@@ -76,7 +77,7 @@ const Profile = (): React.JSX.Element => {
           <input
             type="email"
             name="email"
-            value={profile.email}
+            value={profile.email as string}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
           />
@@ -95,7 +96,7 @@ const Profile = (): React.JSX.Element => {
           <input
             type="text"
             name="role"
-            value={profile.role}
+            value={profile.role as string}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
           />
