@@ -23,10 +23,16 @@ export const useAdminStore = create<AdminState>((set) => ({
   getAllUsers: async () => {
     set({ loading: true, error: null });
     try {
+      const token = sessionStorage.getItem("token")?.trim()?.toString();
       const response = await axios.get(
-        "http://localhost:3000/api/v1/admin/all"
+        "http://localhost:3000/api/v1/admin/all",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      set({ users: response.data.users, loading: false });
+      set({ users: response.data.data, loading: false });
       return response;
     } catch (error: any) {
       set({
