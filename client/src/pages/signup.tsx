@@ -1,18 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAuthStore } from "../api/auth";
 import useCustomToast from "../hooks/useToast";
 import { Spinner } from "@chakra-ui/react";
 import { useNavigate, Link } from "react-router-dom";
+import { HiEyeSlash } from "react-icons/hi2";
+import { HiEye } from "react-icons/hi";
 
 const Signup = (): React.JSX.Element => {
   const toast = useCustomToast();
   const navigate = useNavigate();
-  const { signup, loading, isSignedup } = useAuthStore();
+  const { signup, loading } = useAuthStore();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [show, setShow] = useState(false);
+
+  function toggleShowPassword() {
+    setShow(!show);
+  }
 
   const handleSignup = async (e: any) => {
     e.preventDefault();
@@ -20,18 +27,18 @@ const Signup = (): React.JSX.Element => {
       toast("Fields cannot be blank!", "warning");
     }
     await signup(name, email, password, confirmPassword)
-      .then((res) => console.log(res))
+      .then((res) => {
+        if (res.success) {
+          toast(res.message, "success");
+          setTimeout(() => {
+            navigate("/signin");
+          }, 1500);
+        } else {
+          toast(res.message, "error");
+        }
+      })
       .catch((err) => console.log(err));
   };
-
-  useEffect(() => {
-    if (isSignedup) {
-      toast("signed up successfully", "success");
-      setTimeout(() => {
-        navigate("/signin");
-      }, 1500);
-    }
-  }, [isSignedup]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900 h-screen">
@@ -89,15 +96,27 @@ const Signup = (): React.JSX.Element => {
                 >
                   Password
                 </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                <div className="bg-gray-50 border dark:bg-gray-700 border-gray-300 flex rounded-lg dark:border-gray-600 focus:ring-primary-600 focus:border-primary-600 items-center dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                  <input
+                    type={!show ? "text" : "password"}
+                    name="password"
+                    id="password"
+                    placeholder="••••••••"
+                    className="bg-gray-50  text-gray-900 text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white outline-none"
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <div
+                    onClick={toggleShowPassword}
+                    className="w-8 flex items-center justify-center"
+                  >
+                    {show ? (
+                      <HiEyeSlash color="white" />
+                    ) : (
+                      <HiEye color="white" />
+                    )}
+                  </div>
+                </div>
               </div>
               <div>
                 <label
@@ -106,15 +125,27 @@ const Signup = (): React.JSX.Element => {
                 >
                   Confirm password
                 </label>
-                <input
-                  type="confirm-password"
-                  name="confirm-password"
-                  id="confirm-password"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
+                <div className="bg-gray-50 border dark:bg-gray-700 border-gray-300 flex rounded-lg dark:border-gray-600 focus:ring-primary-600 focus:border-primary-600 items-center dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                  <input
+                    type={!show ? "text" : "password"}
+                    name="confirm-password"
+                    id="confirm-password"
+                    placeholder="••••••••"
+                    className="bg-gray-50  text-gray-900 text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white outline-none"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                  <div
+                    onClick={toggleShowPassword}
+                    className="w-8 flex items-center justify-center"
+                  >
+                    {show ? (
+                      <HiEyeSlash color="white" />
+                    ) : (
+                      <HiEye color="white" />
+                    )}
+                  </div>
+                </div>
               </div>
               <button
                 type="submit"

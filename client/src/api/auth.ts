@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import axios, { AxiosResponse } from "axios";
+import { ISignupResponse } from "../interfaces/auth";
 
 interface User {
   id: string;
@@ -22,7 +23,7 @@ interface AuthState {
     email: string,
     password: string,
     confirmPassword: string
-  ) => Promise<void>;
+  ) => Promise<ISignupResponse>;
   signin: (
     email: string,
     password: string
@@ -55,11 +56,14 @@ export const useAuthStore = create<AuthState>((set) => ({
       );
       set({ user: response.data.data, loading: false });
       sessionStorage.setItem("token", response.data.token);
+      return response.data;
     } catch (error: any) {
       set({
         error: error.response?.data?.message || "Signup failed",
         loading: false,
       });
+      console.log(error.response?.data);
+      return error.response?.data;
     }
   },
 

@@ -42,6 +42,7 @@ const errorStyles = {
   container: {
     ...toastStyles.container,
     bg: "#FFF4F2",
+    color: "black",
   },
 };
 
