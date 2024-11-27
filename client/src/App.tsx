@@ -20,6 +20,12 @@ function App() {
             <Route path="users" element={<DataTable />} />
           </Route>
         </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/admin" element={<Sidebar />}>
+            <Route index element={<Profile />} />
+            <Route path="users" element={<DataTable />} />
+          </Route>
+        </Route>
       </Routes>
     </div>
   );

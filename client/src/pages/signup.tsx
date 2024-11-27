@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthStore } from "../api/auth";
 import useCustomToast from "../hooks/useToast";
 import { Spinner } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Signup = (): React.JSX.Element => {
   const toast = useCustomToast();
@@ -40,7 +40,7 @@ const Signup = (): React.JSX.Element => {
           href="#"
           className="flex items-center mb-4 text-2xl font-semibold text-gray-900 dark:text-white"
         >
-          CDAB
+          VRV Security
         </a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-5 space-y-3 md:space-y-5 sm:p-8">
@@ -126,12 +126,12 @@ const Signup = (): React.JSX.Element => {
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}
-                <a
-                  href="#"
+                <Link
+                  to="/signin"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   Login here
-                </a>
+                </Link>
               </p>
             </form>
           </div>
