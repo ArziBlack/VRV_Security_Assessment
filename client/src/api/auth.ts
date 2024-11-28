@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import axios, { AxiosResponse } from "axios";
-import { ISignupResponse } from "../interfaces/auth";
+import { ISignupResponse, ISigninResponse } from "../interfaces/auth";
 
 interface User {
   id: string;
@@ -24,10 +24,7 @@ interface AuthState {
     password: string,
     confirmPassword: string
   ) => Promise<ISignupResponse>;
-  signin: (
-    email: string,
-    password: string
-  ) => Promise<AxiosResponse<any, any> | undefined>;
+  signin: (email: string, password: string) => Promise<ISigninResponse>;
   update_profile: (
     field: object,
     id: string
@@ -47,14 +44,15 @@ export const useAuthStore = create<AuthState>((set) => ({
     email: string,
     password: string,
     confirmPassword: string
-  ) => {
+  ): Promise<ISignupResponse> => {
     set({ loading: true, error: null });
     try {
       const response = await axios.post(
         "http://localhost:3000/api/v1/auth/signup",
         { name, email, password, confirmPassword }
       );
-      set({ user: response.data.data, loading: false });
+      if (response.data)
+        set({ user: response.data.data, loading: false, isSignedup: true });
       sessionStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error: any) {
@@ -62,7 +60,6 @@ export const useAuthStore = create<AuthState>((set) => ({
         error: error.response?.data?.message || "Signup failed",
         loading: false,
       });
-      console.log(error.response?.data);
       return error.response?.data;
     }
   },
@@ -76,12 +73,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       );
       set({ user: response.data.data, loading: false, isAuthenticated: true });
       sessionStorage.setItem("token", response.data.data.token);
-      return response;
+      return response.data;
     } catch (error: any) {
       set({
         error: error.response?.data?.message || "Signin failed",
         loading: false,
       });
+      return error.response?.data;
     }
   },
 
@@ -89,7 +87,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ loading: true, error: null });
     try {
       const token = sessionStorage.getItem("token")?.trim()?.toString();
-      console.log(token);
       const response = await axios.put(
         `http://localhost:3000/api/v1/user/update/${id}`,
         field,
@@ -110,7 +107,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: () => {
-    set({ user: null });
+    set({ user: null, isSignedup: false, isAuthenticated: false });
     sessionStorage.removeItem("token");
   },
 }));

@@ -22,7 +22,11 @@ const Signin = (): React.JSX.Element => {
 
     await signin(email, password)
       .then((res) => {
-        if (res) toast("signin successful", "success");
+        if (res.success) {
+          toast(res.message, "success");
+        } else {
+          toast(res.message, "error");
+        }
       })
       .catch((err) => console.log(err));
   };
