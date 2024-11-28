@@ -10,7 +10,7 @@ async function main() {
   const admins = [
     {
       name: "Admin User 1",
-      email: "admin1@example.com",
+      email: "admina@example.com",
       role: Role.ADMIN,
       privileges: ["MANAGE_USERS", "VIEW_REPORTS"], // Example privileges
       country: "USA",
@@ -20,7 +20,7 @@ async function main() {
     },
     {
       name: "Admin User 2",
-      email: "admin2@example.com",
+      email: "adminb@example.com",
       role: Role.ADMIN,
       privileges: ["MANAGE_USERS", "EDIT_SETTINGS"], // Example privileges
       country: "Canada",
@@ -55,7 +55,7 @@ async function main() {
   const members = [
     {
       name: "Member User 1",
-      email: "member1@example.com",
+      email: "membera@example.com",
       role: Role.MEMBER,
       country: "USA",
       phone: "+1234567890",
@@ -64,7 +64,7 @@ async function main() {
     },
     {
       name: "Member User 2",
-      email: "member2@example.com",
+      email: "memberb@example.com",
       role: Role.MEMBER,
       country: "Canada",
       phone: "+1987654321",
@@ -73,7 +73,7 @@ async function main() {
     },
     {
       name: "Member User 3",
-      email: "member3@example.com",
+      email: "memberc@example.com",
       role: Role.MEMBER,
       country: "USA",
       phone: "+1122334455",
@@ -82,7 +82,7 @@ async function main() {
     },
     {
       name: "Member User 4",
-      email: "member4@example.com",
+      email: "memberd@example.com",
       role: Role.MEMBER,
       country: "Australia",
       phone: "+1612345678",

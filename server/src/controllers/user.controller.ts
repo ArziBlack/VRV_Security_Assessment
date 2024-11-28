@@ -48,7 +48,7 @@ export default class UserController {
 
       const updatedUser = await prisma.user.update({
         where: { id: Number(id) },
-        data: updatedData,
+        data: req.body || updatedData,
       });
 
       res.status(http_status.OK).json(

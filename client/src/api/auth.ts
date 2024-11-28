@@ -10,6 +10,22 @@ interface User {
   name: string | null;
   role: string | null;
   token: string;
+  country: string;
+  phone: string;
+  homeAddress: string;
+  state: string;
+  city: string;
+  isVerified: boolean;
+  organisation: string;
+  suspended: boolean;
+  zipCode: string;
+  profileImage: string;
+  techUsed: string;
+  certifications: string[];
+  areasOfFocus: string[];
+  achievements: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface AuthState {
@@ -22,7 +38,11 @@ interface AuthState {
     name: string,
     email: string,
     password: string,
-    confirmPassword: string
+    confirmPassword: string,
+    country: string,
+    phone: string,
+    state: string,
+    homeAddress: string
   ) => Promise<ISignupResponse>;
   signin: (email: string, password: string) => Promise<ISigninResponse>;
   update_profile: (
@@ -32,8 +52,10 @@ interface AuthState {
   logout: () => void;
 }
 
+const user = JSON.parse(sessionStorage.getItem("user") || "null") as User;
+
 export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
+  user: user || null,
   isAuthenticated: false,
   isSignedup: false,
   loading: false,
@@ -43,13 +65,26 @@ export const useAuthStore = create<AuthState>((set) => ({
     name: string,
     email: string,
     password: string,
-    confirmPassword: string
+    confirmPassword: string,
+    country: string,
+    phone: string,
+    state: string,
+    homeAddress: string
   ): Promise<ISignupResponse> => {
     set({ loading: true, error: null });
     try {
       const response = await axios.post(
         "http://localhost:3000/api/v1/auth/signup",
-        { name, email, password, confirmPassword }
+        {
+          name,
+          email,
+          password,
+          confirmPassword,
+          country,
+          phone,
+          state,
+          homeAddress,
+        }
       );
       if (response.data)
         set({ user: response.data.data, loading: false, isSignedup: true });
@@ -73,6 +108,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       );
       set({ user: response.data.data, loading: false, isAuthenticated: true });
       sessionStorage.setItem("token", response.data.data.token);
+      sessionStorage.setItem("user", JSON.stringify(response.data.data));
       return response.data;
     } catch (error: any) {
       set({

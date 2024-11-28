@@ -17,6 +17,10 @@ const Signup = (): React.JSX.Element => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [phone, setPhone] = useState(0);
+  const [homeAddress, setHomeAddress] = useState("");
   const [show, setShow] = useState(false);
 
   function toggleShowPassword() {
@@ -28,7 +32,26 @@ const Signup = (): React.JSX.Element => {
     if (!name && !email && !password && !confirmPassword) {
       toast("Fields cannot be blank!", "warning");
     }
-    await signup(name, email, password, confirmPassword)
+    console.log(
+      name,
+      email,
+      password,
+      confirmPassword,
+      country,
+      phone,
+      state,
+      homeAddress
+    );
+    await signup(
+      name,
+      email,
+      password,
+      confirmPassword,
+      country,
+      phone.toString(),
+      state,
+      homeAddress
+    )
       .then((res) => {
         if (res.success) {
           toast(res.message, "success");
@@ -134,7 +157,7 @@ const Signup = (): React.JSX.Element => {
                   name="country"
                   id="country"
                   placeholder="Nigeria"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setCountry(e.target.value)}
                   required={true}
                 />
               </div>
@@ -145,7 +168,7 @@ const Signup = (): React.JSX.Element => {
                   name="phone"
                   id="phone"
                   placeholder="+2349037289192"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setPhone(parseInt(e.target.value))}
                   required={true}
                 />
               </div>
@@ -156,7 +179,7 @@ const Signup = (): React.JSX.Element => {
                   name="state"
                   id="state"
                   placeholder="Nigeria"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setState(e.target.value)}
                   required={true}
                 />
               </div>
@@ -167,7 +190,7 @@ const Signup = (): React.JSX.Element => {
                   name="homeAddress"
                   id="homeAddress"
                   placeholder="No. 1 Cliff Street off crecent ave LA"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setHomeAddress(e.target.value)}
                   required={true}
                 />
               </div>
