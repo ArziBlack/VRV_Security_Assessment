@@ -113,7 +113,7 @@ async function main() {
       name: "Moderator User",
       email: "moderator@example.com",
       password: passwordHash,
-      role: Role.SECURITY_ANALYST, // Moderator can be mapped to a custom role or just use the existing enum
+      role: Role.SECURITY_ANALYST,
       country: "Germany",
       phone: "+491234567890",
       homeAddress: "101 Moderator St, Moderator City",

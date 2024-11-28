@@ -6,6 +6,7 @@ import Sidebar from "./components/sidebar";
 import Profile from "./views/profile";
 import DataTable from "./views/table";
 import ProtectedRoute from "./utils/protected-route";
+import ModDataTable from "./views/mod_table";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Sidebar />}>
             <Route index element={<Profile />} />
-            <Route path="users" element={<DataTable />} />
+            <Route path="users" element={<ModDataTable />} />
           </Route>
         </Route>
         <Route element={<ProtectedRoute />}>

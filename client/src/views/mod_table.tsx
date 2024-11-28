@@ -5,20 +5,20 @@ import { Heading, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useAuthStore } from "../api/auth";
 import { Role } from "../interfaces/auth";
 
-export default function DataTable() {
-  const { users, getAllUsers } = useAdminStore();
+export default function ModDataTable() {
+  const { users, getModAllUsers } = useAdminStore();
   const { user } = useAuthStore();
   console.log(users);
   console.log(user);
 
   useEffect(() => {
-    getAllUsers();
+    getModAllUsers();
   }, []);
 
   console.log(users);
   console.log(Role.SECURITY_ANALYST);
 
-  if (user?.role !== Role.ADMIN) {
+  if (user?.role !== Role.SECURITY_ANALYST) {
     return (
       <div className="flex w-full items-center justify-center h-screen">
         {" "}

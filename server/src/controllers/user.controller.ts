@@ -63,4 +63,55 @@ export default class UserController {
       next(error);
     }
   }
+
+  static async check_network_security_and_verify_users<T>(
+    req: TypedRequest,
+    res: TypedResponse<T>,
+    next: TypedNextFn
+  ) {
+    try {
+      const user = req.user;
+      const { id } = req.params;
+
+      if (!id) {
+        return res.status(http_status.BAD_REQUEST).json(
+          send_response({
+            status: http_status.BAD_REQUEST,
+            success: false,
+            message: "User ID is required!",
+          })
+        );
+      }
+
+      const found_user = await prisma.user.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (!found_user) {
+        return res.status(http_status.NOT_FOUND).json(
+          send_response({
+            status: http_status.NOT_FOUND,
+            success: false,
+            message: "User not found!",
+          })
+        );
+      }
+
+      const updated_user = await prisma.user.update({
+        where: { id: Number(id) },
+        data: { isVerified: true },
+      });
+
+      return res.status(http_status.OK).json(
+        send_response({
+          status: http_status.OK,
+          success: true,
+          message: "User verification updated successfully.",
+          data: updated_user,
+        })
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
 }

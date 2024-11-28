@@ -12,3 +12,19 @@ export interface Profile {
   areasOfFocus?: string[];
   techUsed: string;
 }
+
+export interface IGetAllUsers {
+  status: number;
+  success: boolean;
+  message: string;
+  error?: string[] | string;
+  data?: Profile[];
+}
+
+export interface IVerifyUser {
+  status: number;
+  success: boolean;
+  message: string;
+  error?: string[] | string;
+  data?: Profile[];
+}
