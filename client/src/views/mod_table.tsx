@@ -4,10 +4,17 @@ import { useEffect } from "react";
 import { Heading, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useAuthStore } from "../api/auth";
 import { Role } from "../interfaces/auth";
+import VerifyModal from "../components/verify-modal";
+import React from "react";
 
 export default function ModDataTable() {
   const { users, getModAllUsers } = useAdminStore();
   const { user } = useAuthStore();
+  const [modal, setModal] = React.useState(false);
+  const [id, setId] = React.useState(0);
+  function toggleModal() {
+    setModal(!modal);
+  }
   console.log(users);
   console.log(user);
 
@@ -45,7 +52,13 @@ export default function ModDataTable() {
         <Tbody>
           {users &&
             users.map((user: any) => (
-              <Tr key={user.id}>
+              <Tr
+                key={user.id}
+                onClick={() => {
+                  toggleModal();
+                  setId(user?.id);
+                }}
+              >
                 <Td>{user?.id}</Td>
                 <Td>{user?.name}</Td>
                 <Td>{user?.email}</Td>
@@ -55,6 +68,7 @@ export default function ModDataTable() {
             ))}
         </Tbody>
       </Table>
+      {modal && <VerifyModal toggleModal={toggleModal} id={id} />}
     </div>
   );
 }

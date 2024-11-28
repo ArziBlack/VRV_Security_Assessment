@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from "axios";
 import { ISignupResponse, ISigninResponse } from "../interfaces/auth";
 
 interface User {
-  id: string;
+  id: number;
   uid: string;
   email: string | null;
   name: string | null;
