@@ -1,16 +1,56 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://milton:black177%23@localhost:5432/cdab?schema=public"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int        @id @default(autoincrement())
+  uid            String     @unique @default(uuid())
+  name           String
+  email          String     @unique
+  password       String
+  role           Role       @default(MEMBER)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  achievements   String[]   @default([])
+  areasOfFocus   String[]   @default([])
+  certifications String[]   @default([])
+  city           String?
+  country        String?
+  experience     String?
+  homeAddress    String?
+  industry       String?
+  isVerified     Boolean    @default(false)
+  jobTitle       String?
+  linkedAccounts String[]   @default([])
+  organisation   String?
+  phone          String?
+  profileImage   String?
+  skills         String[]   @default([])
+  state          String?
+  suspended      Boolean    @default(false)
+  techUsed       String?
+  zipCode        String?
+  admin          Admin?
+  moderator      Moderator?
+}
+
+model Admin {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @unique
+  privileges String[] @default([])
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model Moderator {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @unique
+  assignedAreas String[] @default([])
+  user          User     @relation(fields: [userId], references: [id])
 }
 
 enum Role {
@@ -21,45 +61,9 @@ enum Role {
   NETWORK_ADMINISTRATOR
 }
 
-enum Certifications {
+enum Certification {
   CEH
   CISSP
-  CompTIA_Security+
+  CompTIA_Security
   OSCP
-}
-
-enum Skills {
-  Ethical_Hacking
-  Threat_Analysis
-  Incident_Response
-}
-
-model User {
-  id              Int       @id @default(autoincrement()) // Auto-incrementing unique identifier
-  uid             String    @unique @default(uuid())      // Globally unique identifier
-  name            String                                   // Full name of the user
-  email           String    @unique                       // Unique email for account registration
-  isVerified      Boolean   @default(false)               // Email verification status
-  suspended       Boolean   @default(false)               // Account suspension status
-  password        String                                   // Encrypted password
-  phone           String?                                 // Optional phone number for MFA or alerts
-  homeAddress     String?                                 // Optional home address
-  city            String?                                 // City information
-  state           String?                                 // State/Province
-  zipCode         String?                                 // ZIP or Postal code
-  country         String?                                  // User's country
-  profileImage    String?                                 // Profile image URL
-  jobTitle        String?                                 // Job title or role
-  organisation    String?                                 // Current company or institution
-  industry        String?                                 // Industry sector
-  certifications  String[]?                                // List of certifications (e.g., CEH, CISSP)
-  skills          String[]?                                // Array of skills and expertise
-  areasOfFocus    String[]?                                // Areas of focus
-  techUsed        String?                                 // Tools and technologies used (e.g., SIEM tools)
-  experience      String?                                 // Years of experience in cybersecurity
-  linkedAccounts  String[]?                                // Linked accounts (e.g., GitHub, LinkedIn)
-  achievements    String[]?                                // Earned achievements or badges
-  role            Role      @default(MEMBER)              // Role (e.g., MEMBER, ADMIN)
-  createdAt       DateTime  @default(now())               // Account creation timestamp
-  updatedAt       DateTime  @updatedAt                   // Auto-updated timestamp on change
 }

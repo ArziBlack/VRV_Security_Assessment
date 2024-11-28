@@ -128,23 +128,45 @@ const Signup = (): React.JSX.Element => {
                 </div>
               </div>
               <div>
-                <Label label="Your Email" htmlFor={"email"} />
+                <Label label="Your Country" htmlFor={"country"} />
                 <InputField
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="johndoe@email.com"
+                  type="text"
+                  name="country"
+                  id="country"
+                  placeholder="Nigeria"
                   onChange={(e) => setEmail(e.target.value)}
                   required={true}
                 />
               </div>
               <div>
-                <Label label="Your Email" htmlFor={"email"} />
+                <Label label="Phone Number" htmlFor={"phone"} />
                 <InputField
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="johndoe@email.com"
+                  type="number"
+                  name="phone"
+                  id="phone"
+                  placeholder="+2349037289192"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required={true}
+                />
+              </div>
+              <div>
+                <Label label="Your State/Region/Province" htmlFor={"state"} />
+                <InputField
+                  type="text"
+                  name="state"
+                  id="state"
+                  placeholder="Nigeria"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required={true}
+                />
+              </div>
+              <div>
+                <Label label="Home Address" htmlFor={"homeAddress"} />
+                <InputField
+                  type="text"
+                  name="homeAddress"
+                  id="homeAddress"
+                  placeholder="No. 1 Cliff Street off crecent ave LA"
                   onChange={(e) => setEmail(e.target.value)}
                   required={true}
                 />
