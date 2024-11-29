@@ -12,6 +12,8 @@ The assessment project is structured as a monorepo containing two main directori
 
 The frontend application is located in the `client` folder. It is a modern web application built using **React.js** and styled with TailwindCSS, some Chakra UI components were also used. The client interacts with the backend to perform CRUD operations and handle authentication flows.
 
+For more details on how the Backend server works, navigate into the server folder and read the README.md for further insights.
+
 #### **Key Features**
 
 - **User Management:**  
@@ -40,6 +42,8 @@ The frontend application is located in the `client` folder. It is a modern web a
 #### **Description**
 
 The backend application resides in the `server` folder and serves as the core API layer. It is built using **Node.js** with **Express.js** as the web framework and **Prisma** as the ORM for database operations and **Postgresql**. The server implements key business logic for user authentication, authorization, and management.
+
+For more details on how the Backend server works, navigate into the server folder and read the README.md for further insights.
 
 #### **Key Features**
 
