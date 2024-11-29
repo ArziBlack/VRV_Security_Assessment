@@ -3,14 +3,24 @@ import { useAuthStore } from "../api/auth";
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Spinner } from "@chakra-ui/react";
+import { Role } from "../interfaces/auth";
+import { HiEyeSlash } from "react-icons/hi2";
+import { HiEye } from "react-icons/hi";
+import Label from "../components/label";
+import InputField from "../components/input";
 
 const Signin = (): React.JSX.Element => {
   const toast = useCustomToast();
   const navigate = useNavigate();
-  const { signin, loading, isAuthenticated } = useAuthStore();
+  const { signin, loading, isAuthenticated, user } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [show, setShow] = useState(false);
+
+  function toggleShowPassword() {
+    setShow(!show);
+  }
 
   const handleSignin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +44,13 @@ const Signin = (): React.JSX.Element => {
   useEffect(() => {
     if (isAuthenticated) {
       setTimeout(() => {
-        navigate("/");
+        if (user?.role === Role.MEMBER) {
+          navigate("/");
+        } else if (user?.role === Role.ADMIN) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       }, 2000);
     }
   }, [isAuthenticated]);
@@ -73,22 +89,28 @@ const Signin = (): React.JSX.Element => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                <Label label="Password" htmlFor="password" />
+                <div className="bg-gray-50 border dark:bg-gray-700 border-gray-300 flex rounded-lg dark:border-gray-600 focus:ring-primary-600 focus:border-primary-600 items-center dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                  <InputField
+                    type={!show ? "text" : "password"}
+                    name="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    id="password"
+                    required
+                    placeholder="••••••••"
+                    className="bg-gray-50  text-gray-900 text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white border-none outline-none"
+                  />
+                  <div
+                    onClick={toggleShowPassword}
+                    className="w-8 flex items-center justify-center"
+                  >
+                    {show ? (
+                      <HiEyeSlash color="white" />
+                    ) : (
+                      <HiEye color="white" />
+                    )}
+                  </div>
+                </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
