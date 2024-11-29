@@ -8,6 +8,8 @@ const router = Router();
 
 router.route("/all").get(verify_admin, Membercontroller.get_users);
 
+router.route("/:id/delete").delete(verify_admin, Membercontroller.delete_user);
+
 router
   .route("/mod_all")
   .get(verify_moderator, Membercontroller.get_unverified_users);

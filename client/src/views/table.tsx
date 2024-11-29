@@ -4,25 +4,36 @@ import { useEffect } from "react";
 import { Heading, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useAuthStore } from "../api/auth";
 import { Role } from "../interfaces/auth";
+import AdminModal from "../components/admin-modal";
+import React from "react";
+import { Spinner } from "@chakra-ui/react";
 
 export default function DataTable() {
-  const { users, getAllUsers } = useAdminStore();
+  const { users, getAllUsers, loading } = useAdminStore();
   const { user } = useAuthStore();
-  console.log(users);
-  console.log(user);
+  const [modal, setModal] = React.useState(false);
+  const [id, setId] = React.useState(0);
+  function toggleModal() {
+    setModal(!modal);
+  }
 
   useEffect(() => {
     getAllUsers();
-  }, []);
-
-  console.log(users);
-  console.log(Role.SECURITY_ANALYST);
+  }, [modal, id]);
 
   if (user?.role !== Role.ADMIN) {
     return (
       <div className="flex w-full items-center justify-center h-screen">
         {" "}
         you are not authorized to view this page
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className=" overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-modal md:h-full inset-0 bg-black/50 backdrop-blur-md">
+        <Spinner />
       </div>
     );
   }
@@ -45,7 +56,14 @@ export default function DataTable() {
         <Tbody>
           {users &&
             users.map((user: any) => (
-              <Tr key={user.id}>
+              <Tr
+                key={user.id}
+                className="cursor-pointer"
+                onClick={() => {
+                  toggleModal();
+                  setId(user?.id);
+                }}
+              >
                 <Td>{user?.id}</Td>
                 <Td>{user?.name}</Td>
                 <Td>{user?.email}</Td>
@@ -55,6 +73,7 @@ export default function DataTable() {
             ))}
         </Tbody>
       </Table>
+      {modal && <AdminModal toggleModal={toggleModal} id={id} />}
     </div>
   );
 }

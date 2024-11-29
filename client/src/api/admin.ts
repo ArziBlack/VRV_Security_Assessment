@@ -10,10 +10,11 @@ interface AdminState {
   getAllUsers: () => Promise<IGetAllUsers>;
   getModAllUsers: () => Promise<IGetAllUsers>;
   verifyUser: (id: number) => Promise<IVerifyUser>;
+  deleteUser: (id: number) => Promise<any>;
 }
 
 interface User {
-  id: string;
+  id: number;
   email: string;
   role: string;
 }
@@ -78,11 +79,43 @@ export const useAdminStore = create<AdminState>((set) => ({
           },
         }
       );
-      set({ users: response.data.data, loading: false });
+      set((state) => ({
+        users: state.users.map((user) =>
+          user.id === id ? { ...user, ...response.data.data } : user
+        ),
+        loading: false,
+      }));
       return response.data;
     } catch (error: any) {
       set({
-        error: error.response?.data?.message || "Failed to fetch users",
+        error: error.response?.data?.message || "Failed to verify user",
+        loading: false,
+      });
+    }
+  },
+
+  deleteUser: async (id: number) => {
+    set({ loading: true, error: null });
+    try {
+      const token = sessionStorage.getItem("token")?.trim()?.toString();
+      const response = await axios.delete(
+        `http://localhost:3000/api/v1/admin/${id}/delete`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      set((state) => ({
+        users: state.users.map((user) =>
+          user.id === id ? { ...user, ...response.data.data } : user
+        ),
+        loading: false,
+      }));
+      return response.data.message;
+    } catch (error: any) {
+      set({
+        error: error.response?.data?.message || "Failed to delete users",
         loading: false,
       });
     }

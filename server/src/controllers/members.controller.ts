@@ -70,4 +70,58 @@ export default class Membercontroller {
       next(error);
     }
   }
+
+  static async delete_user<T>(
+    req: TypedRequest<{ id: string }>,
+    res: TypedResponse<T>,
+    next: TypedNextFn
+  ) {
+    try {
+      const { id } = req.params;
+
+      const deletedUser = await prisma.user.delete({
+        where: { id: Number(id) },
+      });
+
+      res.status(http_status.OK).json(
+        send_response({
+          status: http_status.OK,
+          success: true,
+          message: "User deleted successfully",
+          data: deletedUser as unknown as T,
+        })
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async suspend_user<T>(
+    req: TypedRequest<{ id: string }>,
+    res: TypedResponse<T>,
+    next: TypedNextFn
+  ) {
+    try {
+      const { id } = req.params;
+      const { suspended } = req.body;
+
+      const updatedUser = await prisma.user.update({
+        where: { id: Number(id) },
+        data: { suspended },
+      });
+
+      res.status(http_status.OK).json(
+        send_response({
+          status: http_status.OK,
+          success: true,
+          message: `User ${
+            suspended ? "suspended" : "unsuspended"
+          } successfully`,
+          data: updatedUser as unknown as T,
+        })
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
 }
