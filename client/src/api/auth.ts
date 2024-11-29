@@ -142,7 +142,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  logout: () => {
+  logout: async () => {
+    await axios.get(`http://localhost:3000/api/v1/auth/logout`);
     set({ user: null, isSignedup: false, isAuthenticated: false });
     sessionStorage.removeItem("token");
   },
