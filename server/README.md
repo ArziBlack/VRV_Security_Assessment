@@ -23,18 +23,9 @@ This project (VRV Security Assessment) is a backend server built using **Node.js
 
 - **Node.js**: v18.0.0 or later
 - **npm**: v10.9.0 or later (or **yarn** as an alternative)
-- **MongoDB**: A running instance of MongoDB (local or cloud)
+- **PostgresSQL**: A running instance of MongoDB (local or cloud)
 
 ---
-
-## Installation
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/ArziBlack/<repository>.git
-cd <repository>
-```
 
 ### Install Dependencies
 
@@ -153,19 +144,14 @@ tsconfig.json
 
 ---
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
 ## Contact
 
 - **Author**: Eghoi Azibapu Milton
 - **Email**: eghoiazibapu@gmail.com
-- **GitHub**: [MiltonBlack](https://github.com/MiltonBlack)
+- **GitHub 1**: [MiltonBlack](https://github.com/MiltonBlack)
+- **GitHub 2**: [ArziBlack](https://github.com/ArziBlack)
 - **LinkedIn**: [Azibapu Eghoi](https://www.linkedin.com/in/azibapu-eghoi-5379b7240/)
 
 ---
 
-This `README.md` provides a solid foundation for any backend server. Feel free to customize it further as needed!
+This `README.md` provides a solid foundation for a backend server.
